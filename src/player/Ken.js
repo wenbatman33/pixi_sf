@@ -33,11 +33,12 @@ export default class Ken extends Sprite {
     this.ken_shouryuken.onComplete = () => {
       this.ken_shouryuken.visible = false;
       this.ken_idle.visible = true;
+      this.ken_idle.gotoAndPlay(0)
     };
     this.addChild(this.ken_shouryuken)
 
     this.ken_hadoukan = new AnimatedSprite(app.res.hadoukan.spritesheet.animations.hadoukan);
-    this.ken_hadoukan.animationSpeed = 0.1;
+    this.ken_hadoukan.animationSpeed = 0.02;
     this.ken_hadoukan.anchor.set(0.5, 1);
     this.ken_hadoukan.play();
     this.ken_hadoukan.visible = false
@@ -45,10 +46,24 @@ export default class Ken extends Sprite {
     this.ken_hadoukan.onComplete = () => {
       this.ken_hadoukan.visible = false;
       this.ken_idle.visible = true;
+      this.ken_idle.gotoAndPlay(0)
     };
-    this.addChild(this.ken_hadoukan)
+
+    this.ken_jump = new AnimatedSprite(app.res.jump.spritesheet.animations.jump);
+    this.ken_jump.animationSpeed = 0.1;
+    this.ken_jump.anchor.set(0.5, 1);
+
+    this.ken_jump.visible = false
+    this.ken_jump.loop = false
+    this.ken_jump.onComplete = () => {
+      this.ken_jump.visible = false;
+      this.ken_idle.alpha = 1;
+      this.ken_idle.gotoAndPlay(0)
+    };
+    this.addChild(this.ken_jump)
 
     this.kenMoveList = {
+      jump: '87',
       hadoken: '83,68,80',
       shoyuken: '68,83,68,80',
     };
@@ -62,6 +77,7 @@ export default class Ken extends Sprite {
     this.moveList.push(e.keyCode)
 
     let controlString = this.moveList.toString()
+
     if (controlString.indexOf(this.kenMoveList.shoyuken) > 0) {
       this.ken_shouryuken.visible = true;
       this.ken_idle.visible = false
@@ -69,9 +85,15 @@ export default class Ken extends Sprite {
     }
     if (controlString.indexOf(this.kenMoveList.hadoken) > 0) {
       this.ken_hadoukan.visible = true;
-      this.ken_idle.visible = false
+      this.ken_idle.alpha = 1;
       this.ken_hadoukan.gotoAndPlay(0)
     }
+    // if (controlString.indexOf(this.kenMoveList.jump) > 0) {
+    //   this.ken_jump.visible = true;
+    //   this.ken_idle.visible = false;
+    //   // this.ken_jump.play();
+    //   this.ken_jump.gotoAndPlay(0)
+    // }
     setTimeout(function() {
       vm.moveList.shift()
       controlString = vm.moveList.toString()
@@ -82,12 +104,11 @@ export default class Ken extends Sprite {
     this.ken_idle.visible = false
     this.ken_walking.visible = true
     if (e.keyCode === 87) {
-      TweenMax.to(this, 1, {
-        y: 450,
-        onComplete: function() {
-          console.log('onComplete')
-        }
-      })
+      this.ken_idle.alpha = 0;
+      TweenMax.fromTo(this, .6, { y: 300 }, { y: 500 })
+      this.ken_jump.visible = true;
+      // this.ken_jump.play();
+      this.ken_jump.gotoAndPlay(0)
     }
     if (e.keyCode === 65) {
       this.x -= 20
