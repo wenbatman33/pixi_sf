@@ -10,7 +10,7 @@ export default class Sound {
     console.log(app.res)
     let sound = app.res[name].sound
     sound.loop = loop
-    sound.volume = 1
+    sound.volume = 0.1
     return sound.play()
     // return sound.stop()
   }
