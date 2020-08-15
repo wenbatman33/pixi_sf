@@ -1,5 +1,5 @@
 import { Sprite, utils, AnimatedSprite, Text, TextStyle } from 'pixi.js'
-import { gsap, TweenMax } from "gsap";
+import { gsap, TimelineMax, TweenMax } from "gsap";
 
 export default class Ken extends Sprite {
   constructor() {
@@ -16,10 +16,10 @@ export default class Ken extends Sprite {
     this.traceMsg = new Text('traceMsg')
     this.traceMsg.anchor.set(0.5)
     this.traceMsg.x = 0
-    this.traceMsg.y = 0
+    this.traceMsg.y = 10
     this.traceMsg.style = new TextStyle({
-      fill: 0xffffff,
-      fontSize: 40,
+      fill: 0x000000,
+      fontSize: 14,
       fontFamily: 'Arial',
       fontStyle: 'bold',
     })
@@ -123,14 +123,16 @@ export default class Ken extends Sprite {
       this.ken_idle.visible = false
       // 按鈕 w
       if (e.keyCode === 87) {
-
-        gsap.to(vm, .5, {
-          y: 300,
-          ease: "easeOut",
-          onComplete: function() {
-            gsap.to(vm, .3, { y: 500, ease: "easeIn" })
-          }
-        });
+        const tl = new TimelineMax({ repeat: 0 });
+        TweenMax.set(vm, { y: 500 })
+        tl.to(vm, .5, { y: 300, ease: "easeOut", }).to(vm, .3, { y: 500, ease: "easeIn" });
+        // gsap.to(vm, .5, {
+        //   y: 300,
+        //   ease: "easeOut",
+        //   onComplete: function() {
+        //     gsap.to(vm, .3, { y: 500, ease: "easeIn" })
+        //   }
+        // });
 
         this.ken_jump.visible = true;
         this.ken_jump.gotoAndPlay(0)
